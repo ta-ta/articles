@@ -7,14 +7,14 @@ class Database_article(Database):
         super(Database_article, self).__init__(dbconfig)
 
     # article
-    def insert_article(self, title, url, hash_, created):
+    def insert_article(self, title, url, image_url, hash_, created):
         """ article追加 """
         try:
             query = """
-                INSERT IGNORE INTO article (title, url, hash, created)
-                VALUES (?, ?, ?, ?)
+                INSERT IGNORE INTO article (title, url, image_url, hash, created)
+                VALUES (?, ?, ?, ?, ?)
             """
-            self.cursor.execute(query, [title, url, hash_, created])
+            self.cursor.execute(query, [title, url, image_url, hash_, created])
             self.connect.commit()
         except:
             self.connect.rollback()
