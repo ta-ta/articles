@@ -4,12 +4,31 @@ import (
 	"errors"
 	"log"
 	"strings"
+	"time"
 
 	"github.com/labstack/echo"
 	"github.com/najeira/echo/echoutil"
 
 	"../db"
 )
+
+func handlerDashboard(c echo.Context) error {
+	// articles取得
+	var dashboards []*db.Dashboard
+	var err error
+	if dashboards, err = db.DB.FetchDashboards(); err != nil {
+		log.Fatalf("FetchDashboards Error: %v\n", err)
+	}
+	var unreads []*int64
+	if unreads, err = db.DB.FetchUnread(); err != nil {
+		log.Fatalf("FetchUnread Error: %v\n", err)
+	}
+	unread := int64(0)
+	if len(unreads) == 1 {
+		unread = *unreads[0]
+	}
+	return render(c, "dashboard", map[string]interface{}{"unread": unread, "dashboards": dashboards})
+}
 
 func handlerArticles(c echo.Context) error {
 	// 記事の並び順
@@ -33,7 +52,8 @@ func handlerUpdateRead(c echo.Context) error {
 	if articleID <= 0 || read < 0 {
 		return errors.New("Invalid articleID or read")
 	}
-	if err := db.DB.UpdateRead(articleID, read); err != nil {
+	now := time.Now().Unix()
+	if err := db.DB.UpdateRead(articleID, read, now); err != nil {
 		log.Fatalf("UpdateRead Error: %v\n", err)
 		return err
 	}
