@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 
 import argparse
-import hashlib
 import datetime
+import hashlib
 import json
-import sys
 import os
-from selenium import webdriver, common
+import sys
 import time
 
 import bs4
 import requests
+from selenium import common, webdriver
 
 import config as CONFIG
 import mysql_article
@@ -19,6 +19,8 @@ QIITA_URL = 'https://qiita.com/'
 GIGAZINE_URL = 'https://gigazine.net/'
 TECHABLE_URL = 'https://techable.jp/ranking'
 GOOGLE_URL = 'https://news.google.com/foryou?hl=ja&gl=JP&ceid=JP%3Aja'
+
+FAVICON = 'http://www.google.com/s2/favicons?domain='
 
 LOCAL = 'local'
 PRODUCT = 'product'
@@ -45,7 +47,7 @@ def get_qiita_daily_trend():
     for aj in article_json['trend']['edges']:
         title = aj['node']['title']
         url = QIITA_URL + aj['node']['author']['urlName'] + '/items/' + aj['node']['uuid']
-        image_url = 'http://www.google.com/s2/favicons?domain=' + url.split('/')[2]
+        image_url = FAVICON + url.split('/')[2]
         articles.append([title, url, image_url])
     return articles
 
