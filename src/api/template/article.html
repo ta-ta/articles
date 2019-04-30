@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+
+<html>
+    {% include "header.html" %}
+    <body>
+        <link rel="stylesheet" type="text/css" href="/static/css/base.css">
+        <link rel="stylesheet" type="text/css" href="/static/css/article.css">
+        <script src="/static/js/article.js"></script>
+        
+        <table class="table table-striped table-condensed articles">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Title</th>
+                    <th>
+                        {% if created_order == "desc" %}
+                            <a href="/articles?created=asc">Created</a>
+                        {% else %}
+                            <a href="/articles?created=desc">Created</a>
+                        {% endif %}
+                    </th>
+                    <th>Priority</th>
+                    <th>未読 / 既読</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in articles %}
+                    <tr>
+                        <td><a href="{{a.URL}}" target="_blank"><img class="favicon" src="http://www.google.com/s2/favicons?domain={{a.Domain}}"></a></td>
+                        <td><a href="{{a.URL}}" target="_blank">{{a.Title}}</a></td>
+                        <td><div class="text-nowrap">{{a.Created}}</div></td>
+                        <td>
+                            <div class="text-nowrap">
+                                <a href="#" id="priority_{{a.ArticleID}}_1" onclick="updatePriority({{a.ArticleID}}, 1);" style="text-decoration:none;">
+                                    {% if 1 <= a.Priority %}
+                                        <i class="fas fa-star" style="color:rgb(253,171,10);"></i>
+                                    {% else %}
+                                        <i class="far fa-star" style="color:rgb(253,171,10);"></i>
+                                    {% endif %}
+                                </a>
+
+                                <a href="#" id="priority_{{a.ArticleID}}_2" onclick="updatePriority({{a.ArticleID}}, 2);" style="text-decoration:none;">
+                                    {% if 2 <= a.Priority %}
+                                        <i class="fas fa-star" style="color:rgb(253,171,10);"></i>
+                                    {% else %}
+                                        <i class="far fa-star" style="color:rgb(253,171,10);"></i>
+                                    {% endif %}
+                                </a>
+
+                                <a href="#" id="priority_{{a.ArticleID}}_3" onclick="updatePriority({{a.ArticleID}}, 3);" style="text-decoration:none;">
+                                    {% if 3 <= a.Priority %}
+                                        <i class="fas fa-star" style="color:rgb(253,171,10);"></i>
+                                    {% else %}
+                                        <i class="far fa-star" style="color:rgb(253,171,10);"></i>
+                                    {% endif %}
+                                </a>
+                                
+                                <a href="#" id="priority_{{a.ArticleID}}_4" onclick="updatePriority({{a.ArticleID}}, 4);" style="text-decoration:none;">
+                                    {% if 4 <= a.Priority %}
+                                        <i class="fas fa-star" style="color:rgb(253,171,10);"></i>
+                                    {% else %}
+                                        <i class="far fa-star" style="color:rgb(253,171,10);"></i>
+                                    {% endif %}
+                                </a>
+
+                                <a href="#" id="priority_{{a.ArticleID}}_5" onclick="updatePriority({{a.ArticleID}}, 5);" style="text-decoration:none;">
+                                    {% if 5 <= a.Priority %}
+                                        <i class="fas fa-star" style="color:rgb(253,171,10);"></i>
+                                    {% else %}
+                                        <i class="far fa-star" style="color:rgb(253,171,10);"></i>
+                                    {% endif %}
+                                </a>
+                            </div>
+                        </td>
+                        <td>
+                            {% if a.Kind == 1 %}
+                                <input type="button" id="read_{{a.ArticleID}}" value="未読にする" onclick="UpdateRead({{a.ArticleID}});">
+                            {% else %}
+                                <input type="button" id="read_{{a.ArticleID}}" value="既読にする" onclick="UpdateRead({{a.ArticleID}});">
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </body>
+</html>
+
+
