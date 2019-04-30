@@ -10,7 +10,7 @@ type Article struct {
 	ArticleID int64  `db:"article_id"`
 	Title     string `db:"title"`
 	URL       string `db:"url"`
-	Domain    string
+	ImageURL  string `db:"image_url"`
 	Kind      int64  `db:"kind"`
 	Created   string `db:"created"`
 	Priority  int64  `db:"priority"`
@@ -60,11 +60,10 @@ func (db Database) FetchUnread() ([]*int64, error) {
 	return unreads, nil
 }
 
-// FetchMasters masterを取ってくる
+// FetchArticles articleを取ってくる
 func (db Database) FetchArticles(read int64, created_order string) ([]*Article, error) {
-	// 検索クエリ
 	var articles []*Article
-	query := "SELECT `id` as article_id, `title`, `url`, `kind`, DATE(FROM_UNIXTIME(`created`)) as created, `priority` " +
+	query := "SELECT `id` as article_id, `title`, `url`, `image_url`, `kind`, DATE(FROM_UNIXTIME(`created`)) as created, `priority` " +
 		"FROM `article` " +
 		"WHERE kind = ? " +
 		"ORDER BY `priority` desc, `created` " + created_order

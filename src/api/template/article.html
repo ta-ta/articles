@@ -26,7 +26,7 @@
             <tbody>
                 {% for a in articles %}
                     <tr>
-                        <td><a href="{{a.URL}}" target="_blank"><img class="favicon" src="http://www.google.com/s2/favicons?domain={{a.Domain}}"></a></td>
+                        <td><a href="{{a.URL}}" target="_blank"><div class="img-container"><img class="image" src="{{a.ImageURL}}"></div></a></td>
                         <td><a href="{{a.URL}}" target="_blank">{{a.Title}}</a></td>
                         <td><div class="text-nowrap">{{a.Created}}</div></td>
                         <td>
