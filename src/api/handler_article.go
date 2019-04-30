@@ -3,7 +3,6 @@ package main
 import (
 	"errors"
 	"log"
-	"strings"
 	"time"
 
 	"github.com/labstack/echo"
@@ -39,9 +38,6 @@ func handlerArticles(c echo.Context) error {
 	var err error
 	if articles, err = db.DB.FetchArticles(read, created_order); err != nil {
 		log.Fatalf("FetchArticles Error: %v\n", err)
-	}
-	for _, article := range articles {
-		article.Domain = strings.Split(article.URL, "/")[2]
 	}
 	return render(c, "article", map[string]interface{}{"articles": articles, "created_order": created_order, "read": read})
 }
