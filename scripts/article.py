@@ -11,6 +11,9 @@ import time
 import bs4
 import requests
 from selenium import common, webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.chrome.options import Options
 
 import config as CONFIG
 import mysql_article
@@ -90,35 +93,36 @@ def get_techable_ranking():
 
 def get_google_recommend():
     print('get_google_recommend')
-    driver = webdriver.Chrome(os.environ['CHOROMEDRIVER_PATH'])
+    chrome_options = Options()
+    #chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--disable-gpu')
+    driver = webdriver.Chrome(os.environ['CHOROMEDRIVER_PATH'], options=chrome_options)
+    #driver = webdriver.Chrome(os.environ['CHOROMEDRIVER_PATH'])
+    driver.set_page_load_timeout(5)
+    driver.implicitly_wait(5)
     driver.get(GOOGLE_URL)
 
     # login
-    element = driver.find_element_by_class_name('whsOnd')
-    element.send_keys(CONFIG.EMAIL)
-    time.sleep(5)
-    element = driver.find_element_by_class_name('CwaK9')
-    element.click()
-    time.sleep(5)
-
-    element = driver.find_element_by_class_name('whsOnd')
-    element.send_keys(CONFIG.PASSWORD)
-    time.sleep(5)
-    element = driver.find_element_by_class_name('CwaK9')
-    element.click()
-    time.sleep(5)
+    element = driver.find_element_by_id('identifierId')
+    element.send_keys(CONFIG.EMAIL, Keys.ENTER)
+    element = driver.find_element_by_id('password').find_element_by_tag_name('input')
+    element.send_keys(CONFIG.PASSWORD, Keys.ENTER)
 
     article_blocks = driver.find_elements_by_class_name('NiLAwe')
     articles = []
     for article_block in article_blocks:
-        article_part = article_block.find_element_by_class_name('ipQwMb')
+        article_part = article_block.find_element_by_tag_name('h3')
         title = article_part.find_element_by_tag_name('a').text
         url = article_part.find_element_by_tag_name('a').get_attribute('href')
         try:
-            image_url = article_block.find_element_by_class_name('tvs3Id').get_attribute('src')
+            image_url = article_block.find_element_by_tag_name('img').get_attribute('src')
         except common.exceptions.NoSuchElementException:
             image_url = '#'
+        print(title)
         articles.append([title, url, image_url])
+    driver.close()
+    driver.quit()
     return articles
 
 
@@ -150,5 +154,5 @@ if __name__ == '__main__':
     insert_articles(articles, now)
 
     # google おすすめ
-    articles = get_google_recommend()
-    insert_articles(articles, now)
+    # articles = get_google_recommend()
+    # insert_articles(articles, now)
