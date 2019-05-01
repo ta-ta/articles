@@ -21,7 +21,7 @@ func setupHandlers(app *echo.Echo) error {
 
 	app.GET("/", handlerDashboard)
 	app.GET("/dashboard", handlerDashboard)
-	app.GET("/articles", handlerArticles, oauth)
+	app.GET("/articles", handlerArticles)
 	app.GET("/:articleID/read", handlerUpdateRead, oauth)
 	app.GET("/:articleID/priority", handlerUpdatePriproty, oauth)
 
