@@ -16,3 +16,5 @@
 ### 記事の追加
 `script/article.py` によりDBに追加される  
 追加対象の記事は`script/article.py`に記載
+
+cronにより自動実行している
